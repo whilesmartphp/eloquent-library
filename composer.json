@@ -16,7 +16,11 @@
     "require-dev": {
         "orchestra/testbench": "^9.0|^10.0",
         "laravel/pint": "^1.22",
-        "fakerphp/faker": "^1.24"
+        "fakerphp/faker": "^1.24",
+        "whilesmart/eloquent-agents": "dev-main"
+    },
+    "suggest": {
+        "whilesmart/eloquent-agents": "Exposes the library to AI agents as grounding tools (library.list, library.read). Install to let an agent consult the content store."
     },
     "config": {
         "platform": {

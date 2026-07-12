@@ -4,6 +4,10 @@ namespace Whilesmart\Library;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Whilesmart\Agents\Facades\Agents;
+use Whilesmart\Agents\Tools\AbstractTool;
+use Whilesmart\Library\Agents\Tools\LibraryListTool;
+use Whilesmart\Library\Agents\Tools\LibraryReadTool;
 use Whilesmart\Library\Presenters\PresenterRegistry;
 
 class LibraryServiceProvider extends ServiceProvider
@@ -32,5 +36,22 @@ class LibraryServiceProvider extends ServiceProvider
                 ->prefix(config('library.route_prefix', 'api'))
                 ->group(__DIR__.'/../routes/api.php');
         }
+
+        $this->registerAgentTools();
+    }
+
+    /**
+     * Expose the library to eloquent-agents as grounding tools, but only when
+     * that (optional) package is installed. Guarding on the base tool class
+     * keeps the tool classes from ever autoloading when the framework is absent.
+     */
+    protected function registerAgentTools(): void
+    {
+        if (! class_exists(AbstractTool::class)) {
+            return;
+        }
+
+        Agents::registerTool(LibraryListTool::class);
+        Agents::registerTool(LibraryReadTool::class);
     }
 }
