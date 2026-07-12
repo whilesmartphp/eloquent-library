@@ -8,18 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Whilesmart\Files\Traits\HasFiles;
 use Whilesmart\Library\Database\Factories\AssetFactory;
 
 /**
  * A single artifact in the library: a thin, polymorphic envelope. `kind` is an
  * open string. Text kinds (note/snippet/...) use `body`; binary kinds
- * (image/video/...) carry a URL or reference in `metadata`. `metadata` holds
- * any kind-specific extension fields, so new kinds need no schema change.
+ * (image/video/...) hang their file off the eloquent-files relation. `metadata`
+ * holds any kind-specific extension fields, so new kinds need no schema change.
  * Presenters (config/library.php) turn a kind into what a consumer reads.
  */
 class Asset extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, HasFiles, SoftDeletes;
 
     protected $guarded = ['id'];
 
@@ -45,6 +46,14 @@ class Asset extends Model
     public function owner(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * The URL of the asset's attached file (binary kinds), if any.
+     */
+    public function getUrlAttribute(): ?string
+    {
+        return $this->files()->first()?->url;
     }
 
     public function collection(): BelongsTo

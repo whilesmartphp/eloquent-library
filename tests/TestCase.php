@@ -4,6 +4,7 @@ namespace Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use Whilesmart\Files\FilesServiceProvider;
 use Whilesmart\Library\LibraryServiceProvider;
 use Whilesmart\OwnerAccess\OwnerAccessServiceProvider;
 
@@ -20,6 +21,7 @@ abstract class TestCase extends BaseTestCase
     {
         return [
             OwnerAccessServiceProvider::class,
+            FilesServiceProvider::class,
             LibraryServiceProvider::class,
         ];
     }

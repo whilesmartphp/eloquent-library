@@ -25,7 +25,7 @@ class DefaultAssetPresenter implements LibraryAssetPresenter
             'kind' => $asset->kind,
             'title' => $asset->title,
             'description' => $asset->description,
-            'url' => $meta['url'] ?? null,
+            'url' => $asset->url ?? ($meta['url'] ?? null),
             'folder' => $asset->folder?->name,
         ];
     }
